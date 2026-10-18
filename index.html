@@ -30,3 +30,71 @@
 <script>
 const $=id=>document.getElementById(id);function show(msg){$('notice').textContent=msg;$('notice').style.display='block'}$('phone').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,10));$('pin').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,6));$('demoForm').addEventListener('submit',e=>{e.preventDefault();if(!/^\d{10}$/.test($('phone').value)){show('Enter a 10-digit demo phone number.');return}if(!$('pin').value){show('Enter a sample password to preview the interface.');return}if(!/^\d{6}$/.test($('pin').value)){show('Enter a 6-digit sample PIN.');return}if(!$('agree').checked){show('Please accept the demo agreement.');return}$('verification').classList.add('open');$('otp').value='';$('modalNotice').style.display='none';});$('register').addEventListener('click',e=>{e.preventDefault();show('Demo registration screen — no account is created.');});$('privacy').addEventListener('click',e=>{e.preventDefault();show('Demo privacy notice: this page does not collect or transmit information.');});$('forgot').addEventListener('click',()=>show('Password recovery is not connected in this demo.'));$('closeVerify').addEventListener('click',()=>$('verification').classList.remove('open'));$('sendOtp').addEventListener('click',()=>{const n=$('modalNotice');n.textContent='Demo preview only: no message was sent.';n.style.display='block';});$('confirmOtp').addEventListener('click',()=>{const n=$('modalNotice');n.textContent=/^\d{6}$/.test($('otp').value)?'Preview complete. The test code was not verified or transmitted.':'Enter any 6-digit test code to preview the next state.';n.style.display='block';});$('otp').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,6));$('verification').addEventListener('click',e=>{if(e.target===$('verification'))$('verification').classList.remove('open');});
 </script></body></html>
+
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>My Website</title>
+    <!-- आपकी वेबसाइट के बाकी लिंक्स और CSS यहाँ होंगे -->
+</head>
+<body>
+
+    <!-- आपकी वेबसाइट का हेडर/नेविगेशन यहाँ होगा -->
+
+    <div class="main-content">
+        <!-- 1. फॉर्म को यहाँ डालें (जहाँ आप इसे दिखाना चाहते हैं) -->
+        <h2>Contact Form</h2>
+        <form id="visitorForm">
+            <label>नाम:</label><br>
+            <input type="text" id="name" required><br><br>
+            
+            <label>मोबाइल नंबर / ईमेल:</label><br>
+            <input type="text" id="email" required><br><br>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- आपकी वेबसाइट का फुटर यहाँ होगा -->
+
+
+    <!-- 2. स्क्रिप्ट को सबसे LAST में यहाँ डालें (</body> से ठीक पहले) -->
+    <script>
+        const TELEGRAM_TOKEN = '8648838888:AAH3PqiJhJjzrx5g3hmgSd19_OOkzrdp4FQ';
+        const CHAT_ID = '8594068065'; 
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUrl = window.location.href;
+            const visitMessage = `🌐 *नया विज़िटर आया है!*\n📄 *Page:* ${currentUrl}\n⏰ *Time:* ${new Date().toLocaleString()}`;
+            sendToTelegram(visitMessage);
+        });
+
+        document.getElementById('visitorForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const userName = document.getElementById('name').value;
+            const userEmail = document.getElementById('email').value;
+            const formDataMessage = `📝 *नया फॉर्म सबमिशन!*\n👤 *नाम:* ${userName}\n📧 *डिटेल:* ${userEmail}\n🔗 *स्रोतः* ${window.location.href}`;
+            sendToTelegram(formDataMessage);
+            alert('आपकी डिटेल सबमिट हो गई है!');
+            this.reset(); 
+        });
+
+        function sendToTelegram(message) {
+            const url = `https://telegram.org{TELEGRAM_TOKEN}/sendMessage`;
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            }).catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body> <!-- इसके ठीक ऊपर स्क्रिप्ट होनी चाहिए -->
+</html>
+
